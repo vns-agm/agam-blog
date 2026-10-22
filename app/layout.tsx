@@ -3,9 +3,20 @@ import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import "./globals.css";
 
+const description = "Notes on code, AWS, interviews, career growth and chess, from a Senior Software Engineer.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://agam-blog-iota.vercel.app"),
   title: "Agam's Blog",
-  description: "A personal blog powered by Next.js and Turso",
+  description,
+  openGraph: {
+    type: "website",
+    siteName: "Agam's Blog",
+    title: "Agam's Blog",
+    description,
+    images: [{ url: "/images/agam.jpg", width: 300, height: 300, alt: "Agam Srivastava" }],
+  },
+  twitter: { card: "summary", title: "Agam's Blog", description },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
