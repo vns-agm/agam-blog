@@ -31,8 +31,8 @@ export default function IntroCard() {
         </ul>
         <p>
           I&apos;ve spent {yearsExp}+ years building web apps with React, Next.js, Node.js and AWS. Away from
-          the keyboard I&apos;m a national-level chess player (FIDE 1525) and I coach at Agm-Chess Classes.
-          Chess shapes how I write code: think a few moves ahead. This blog is where I share what I learn.
+          the keyboard I&apos;m a national-level chess player (FIDE 1525).
+          This blog is where I share what I learn.
         </p>
         <div className="intro-links">
           {links.map((l) => (
