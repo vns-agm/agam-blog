@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { listPosts } from "@/lib/db";
 import { formatDate } from "./lib-format";
+import IntroCard from "./IntroCard";
 
 export const dynamic = "force-dynamic";
 
@@ -8,9 +9,10 @@ export default async function Home() {
   const posts = await listPosts();
   return (
     <>
+      <IntroCard />
       <section className="hero">
-        <h1>Notes & writing</h1>
-        <p>Thoughts on code, learning and everything in between.</p>
+        <h2>Notes & writing</h2>
+        <p>Thoughts on code, chess, learning and everything in between.</p>
       </section>
       {posts.length === 0 ? (
         <p className="muted">No posts yet.</p>
