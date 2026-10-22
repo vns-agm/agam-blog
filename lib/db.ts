@@ -24,6 +24,10 @@ function getClient(): Client {
 }
 
 async function ensureSchema(db: Client) {
+  const existing = await db.execute(
+    "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'posts'"
+  );
+  if (existing.rows.length > 0) return;
   await db.batch(
     [
       `CREATE TABLE IF NOT EXISTS posts (
@@ -40,18 +44,16 @@ async function ensureSchema(db: Client) {
     ],
     "write"
   );
-  const { rows } = await db.execute("SELECT COUNT(*) AS n FROM posts");
-  if (Number(rows[0].n) === 0) {
-    await db.execute({
-      sql: "INSERT INTO posts (title, slug, excerpt, content) VALUES (?, ?, ?, ?)",
-      args: [
-        "Hello, Turso!",
-        "hello-turso",
-        "The first post on this blog, stored in a Turso (libSQL) database.",
-        "# Hello, Turso!\n\nThis blog is built with **Next.js** and stores every post in **Turso**.\n\nHead to `/admin` to write your own posts. Content is written in Markdown.",
-      ],
-    });
-  }
+  // Seed a welcome post only when the table is first created.
+  await db.execute({
+    sql: "INSERT INTO posts (title, slug, excerpt, content) VALUES (?, ?, ?, ?)",
+    args: [
+      "Hello, Turso!",
+      "hello-turso",
+      "The first post on this blog, stored in a Turso (libSQL) database.",
+      "# Hello, Turso!\n\nThis blog is built with **Next.js** and stores every post in **Turso**.\n\nHead to `/admin` to write your own posts. Content is written in Markdown.",
+    ],
+  });
 }
 
 export async function db(): Promise<Client> {
