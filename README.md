@@ -1,4 +1,4 @@
-# Turso Blog
+# Agam's Blog
 
 A personal blog built with **Next.js 16 (App Router)** and **Turso** (libSQL) as the database.
 
@@ -21,9 +21,9 @@ Open http://localhost:3000, and http://localhost:3000/admin (password = `ADMIN_P
 ```bash
 brew install tursodatabase/tap/turso
 turso auth signup              # or: turso auth login
-turso db create turso-blog
-turso db show turso-blog --url # -> TURSO_DATABASE_URL
-turso db tokens create turso-blog # -> TURSO_AUTH_TOKEN
+turso db create agam-blog
+turso db show agam-blog --url # -> TURSO_DATABASE_URL
+turso db tokens create agam-blog # -> TURSO_AUTH_TOKEN
 ```
 
 Put both values in `.env.local`, set a real `ADMIN_PASSWORD`, and restart `npm run dev`.

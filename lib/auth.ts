@@ -7,11 +7,11 @@ const COOKIE = "blog_admin";
 function token(): string {
   const pw = process.env.ADMIN_PASSWORD;
   if (!pw) throw new Error("ADMIN_PASSWORD is not set");
-  return createHash("sha256").update(`turso-blog:${pw}`).digest("hex");
+  return createHash("sha256").update(`agam-blog:${pw}`).digest("hex");
 }
 
 export function checkPassword(input: string): boolean {
-  const a = Buffer.from(createHash("sha256").update(`turso-blog:${input}`).digest("hex"));
+  const a = Buffer.from(createHash("sha256").update(`agam-blog:${input}`).digest("hex"));
   const b = Buffer.from(token());
   return a.length === b.length && timingSafeEqual(a, b);
 }
