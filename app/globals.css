@@ -61,6 +61,9 @@ main.container { padding-top: 32px; padding-bottom: 48px; }
 .prose h2 { margin-top: 40px; }
 .prose h3 { margin-top: 28px; font-size: 20px; }
 .prose li { margin: 4px 0; }
+.prose table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 15px; }
+.prose th, .prose td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+.prose th { color: var(--muted); font-size: 13px; font-weight: 600; }
 .prose img { display: block; max-width: 100%; max-height: 75vh; width: auto; height: auto; margin: 0 auto; border-radius: 12px; border: 1px solid var(--border); }
 .form { display: grid; gap: 16px; }
 .form.narrow { max-width: 360px; }
