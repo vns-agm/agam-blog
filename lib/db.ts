@@ -11,6 +11,16 @@ export type Post = {
   updated_at: string;
 };
 
+export type TopicRequest = {
+  id: number;
+  topic: string;
+  details: string;
+  name: string;
+  email: string;
+  status: "new" | "done";
+  created_at: string;
+};
+
 let client: Client | null = null;
 let schemaReady: Promise<void> | null = null;
 
@@ -24,6 +34,22 @@ function getClient(): Client {
 }
 
 async function ensureSchema(db: Client) {
+  await db.batch(
+    [
+      `CREATE TABLE IF NOT EXISTS topic_requests (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        topic TEXT NOT NULL,
+        details TEXT NOT NULL DEFAULT '',
+        name TEXT NOT NULL DEFAULT '',
+        email TEXT NOT NULL DEFAULT '',
+        status TEXT NOT NULL DEFAULT 'new',
+        ip_hash TEXT NOT NULL DEFAULT '',
+        created_at TEXT NOT NULL DEFAULT (datetime('now'))
+      )`,
+      `CREATE INDEX IF NOT EXISTS idx_topic_requests_ip ON topic_requests(ip_hash, created_at)`,
+    ],
+    "write"
+  );
   const existing = await db.execute(
     "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'posts'"
   );
@@ -97,4 +123,13 @@ export function slugify(s: string): string {
     .replace(/[^a-z0-9\s-]/g, "")
     .replace(/[\s-]+/g, "-")
     .replace(/^-|-$/g, "") || "post";
+}
+
+export async function listTopicRequests(): Promise<TopicRequest[]> {
+  const c = await db();
+  const { rows } = await c.execute(
+    `SELECT id, topic, details, name, email, status, created_at FROM topic_requests
+     ORDER BY status = 'done', created_at DESC, id DESC`
+  );
+  return rows as unknown as TopicRequest[];
 }

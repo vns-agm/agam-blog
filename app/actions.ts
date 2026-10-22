@@ -1,11 +1,13 @@
 "use server";
 
+import { createHash } from "node:crypto";
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { db, slugify } from "@/lib/db";
 import { checkPassword, clearAdminCookie, requireAdmin, setAdminCookie } from "@/lib/auth";
 
-export type FormState = { error?: string };
+export type FormState = { error?: string; ok?: boolean };
 
 function readPostForm(form: FormData) {
   const title = String(form.get("title") ?? "").trim();
@@ -73,4 +75,52 @@ export async function deletePost(id: number) {
   const c = await db();
   await c.execute({ sql: "DELETE FROM posts WHERE id = ?", args: [id] });
   revalidatePath("/", "layout");
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export async function requestTopic(_: FormState, form: FormData): Promise<FormState> {
+  // Hidden field that people never see; bots that fill it are silently ignored.
+  if (String(form.get("website") ?? "")) return { ok: true };
+
+  const topic = String(form.get("topic") ?? "").trim();
+  const details = String(form.get("details") ?? "").trim();
+  const name = String(form.get("name") ?? "").trim();
+  const email = String(form.get("email") ?? "").trim();
+  if (topic.length < 3) return { error: "Please tell me the topic you'd like a post on." };
+  if (topic.length > 150 || details.length > 1500 || name.length > 80 || email.length > 120)
+    return { error: "That's a bit long. Please shorten it." };
+  if (email && !EMAIL_RE.test(email)) return { error: "That email doesn't look right." };
+
+  const h = await headers();
+  const ip = (h.get("x-forwarded-for") ?? "").split(",")[0].trim() || "unknown";
+  const ipHash = createHash("sha256").update(`agam-blog-ip:${ip}`).digest("hex").slice(0, 32);
+
+  const c = await db();
+  const { rows } = await c.execute({
+    sql: "SELECT COUNT(*) AS n FROM topic_requests WHERE ip_hash = ? AND created_at > datetime('now', '-1 hour')",
+    args: [ipHash],
+  });
+  if (Number(rows[0].n) >= 5) return { error: "Thanks! You've sent a few already, please try again later." };
+
+  await c.execute({
+    sql: "INSERT INTO topic_requests (topic, details, name, email, ip_hash) VALUES (?, ?, ?, ?, ?)",
+    args: [topic, details, name, email, ipHash],
+  });
+  revalidatePath("/admin");
+  return { ok: true };
+}
+
+export async function setTopicRequestStatus(id: number, status: "new" | "done") {
+  await requireAdmin();
+  const c = await db();
+  await c.execute({ sql: "UPDATE topic_requests SET status = ? WHERE id = ?", args: [status, id] });
+  revalidatePath("/admin");
+}
+
+export async function deleteTopicRequest(id: number) {
+  await requireAdmin();
+  const c = await db();
+  await c.execute({ sql: "DELETE FROM topic_requests WHERE id = ?", args: [id] });
+  revalidatePath("/admin");
 }

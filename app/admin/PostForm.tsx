@@ -20,7 +20,7 @@ export default function PostForm({ action, post, submitLabel }: Props) {
         <input name="title" defaultValue={post?.title} required />
       </label>
       <label>
-        Slug <span className="muted">(optional — generated from title)</span>
+        <span>Slug <span className="muted">(optional — generated from title)</span></span>
         <input name="slug" defaultValue={post?.slug} />
       </label>
       <label>
@@ -28,7 +28,7 @@ export default function PostForm({ action, post, submitLabel }: Props) {
         <input name="excerpt" defaultValue={post?.excerpt} />
       </label>
       <label>
-        Content <span className="muted">(Markdown)</span>
+        <span>Content <span className="muted">(Markdown)</span></span>
         <textarea name="content" rows={16} defaultValue={post?.content} required />
       </label>
       <label className="checkbox">
