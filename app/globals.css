@@ -57,7 +57,7 @@ main { padding: 32px 16px 48px; }
 .prose { margin-top: 24px; }
 .prose pre { background: var(--surface); border: 1px solid var(--border); padding: 12px; border-radius: 8px; overflow-x: auto; }
 .prose code { font-size: 0.9em; }
-.prose img { max-width: 100%; }
+.prose img { max-width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border); }
 .form { display: grid; gap: 16px; }
 .form.narrow { max-width: 360px; }
 .form label { display: grid; gap: 6px; font-weight: 600; font-size: 14px; }
