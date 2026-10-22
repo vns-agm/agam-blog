@@ -10,21 +10,22 @@ const ideas = [
   "How I prepare for chess tournaments",
 ];
 
-export default function TopicRequestForm() {
+export default function TopicRequestForm({ onClose }: { onClose: () => void }) {
   const [state, action, pending] = useActionState<FormState, FormData>(requestTopic, {});
   const topicRef = useRef<HTMLInputElement>(null);
 
   if (state.ok) {
     return (
-      <section className="card request" aria-live="polite">
-        <h2>Thanks for the idea! 🙌</h2>
+      <div className="request" aria-live="polite">
+        <h2 id="request-heading">Thanks for the idea! 🙌</h2>
         <p className="muted">I&apos;ve got your suggestion and will keep it in mind for an upcoming post.</p>
-      </section>
+        <button type="button" onClick={onClose}>Close</button>
+      </div>
     );
   }
 
   return (
-    <section className="card request" aria-labelledby="request-heading">
+    <div className="request">
       <h2 id="request-heading">Want me to write about something?</h2>
       <p className="muted">
         Curious how I juggle chess and my professional life, a challenge I&apos;ve faced, or anything else? Suggest a
@@ -73,6 +74,6 @@ export default function TopicRequestForm() {
         </label>
         <button type="submit" disabled={pending}>{pending ? "Sending…" : "Send suggestion"}</button>
       </form>
-    </section>
+    </div>
   );
 }

@@ -2,7 +2,6 @@ import Link from "next/link";
 import { listPosts } from "@/lib/db";
 import { formatDate } from "./lib-format";
 import IntroCard from "./IntroCard";
-import TopicRequestForm from "./TopicRequestForm";
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +30,6 @@ export default async function Home() {
           ))}
         </ul>
       )}
-      <TopicRequestForm />
     </>
   );
 }

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import TopicRequestDialog from "./TopicRequestDialog";
 
 // Career started January 2022; shown as whole years, e.g. "4+".
 const yearsExp = Math.floor((Date.now() - Date.UTC(2022, 0, 1)) / (365.25 * 24 * 60 * 60 * 1000));
@@ -41,6 +42,7 @@ export default function IntroCard() {
               {l.primary && " →"}
             </a>
           ))}
+          <TopicRequestDialog />
         </div>
       </div>
     </section>

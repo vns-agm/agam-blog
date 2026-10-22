@@ -105,8 +105,6 @@ button.danger { color: var(--danger); }
   .intro-photo { width: 96px; height: 96px; }
   .intro h1 { font-size: 24px; }
 }
-.request { margin-top: 48px; padding: 24px; }
-.request h2 { margin: 0 0 4px; font-size: 22px; }
 .request > p { margin: 0 0 16px; }
 .idea-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 .idea-chip {
@@ -123,4 +121,23 @@ button.danger { color: var(--danger); }
 .request-list li { padding: 16px 20px; }
 .request-list p { margin: 6px 0; white-space: pre-wrap; }
 .request-list li.done { opacity: 0.55; }
-@media (max-width: 560px) { .form-row { grid-template-columns: 1fr; } .request { padding: 20px; } }
+@media (max-width: 560px) { .form-row { grid-template-columns: 1fr; } }
+.chip-accent { background: transparent; color: var(--accent); border-color: var(--accent); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.chip-accent:hover { background: var(--accent); color: #fff; }
+.request-dialog {
+  width: min(600px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 0;
+  border: 1px solid var(--border); border-radius: 16px; background: var(--surface); color: var(--text);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+}
+.request-dialog::backdrop { background: rgba(0, 0, 0, 0.55); }
+.request-dialog[open] { animation: dialog-in 160ms ease-out; }
+@keyframes dialog-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.request-panel { position: relative; padding: 28px 24px 24px; }
+.request h2 { margin: 0 0 4px; font-size: 22px; padding-right: 32px; }
+.dialog-close {
+  position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; padding: 0;
+  background: transparent; color: var(--muted); font-size: 26px; line-height: 1; border-radius: 8px;
+}
+.dialog-close:hover { background: var(--bg); color: var(--text); }
+body:has(.request-dialog[open]) { overflow: hidden; }
+@media (max-width: 560px) { .request-panel { padding: 24px 18px 18px; } }
